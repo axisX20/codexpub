@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
+import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
-  final List<String> _tasks = [];
+  final List<Task> _tasks = [];
 
-  List<String> get tasks => _tasks;
+  List<Task> get tasks => _tasks;
 
-  void addTask(String task) {
-    if (task.trim().isEmpty) return;
+  void addTask(Task task) {
     _tasks.add(task);
     notifyListeners();
   }
