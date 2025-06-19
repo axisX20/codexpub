@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 import '../models/task.dart';
 import '../provider/task_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
@@ -57,60 +58,81 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Add Task')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Task Name'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter task name' : null,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _descriptionController,
-                  decoration: const InputDecoration(labelText: 'Task Description'),
-                  validator: (v) => v == null || v.isEmpty ? 'Enter description' : null,
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _deadline == null
-                            ? 'No deadline chosen'
-                            : 'Deadline: ${_deadline!.toLocal()}'.split('.').first,
+    final locale = AppLocalizations.of(context);
+    return NeumorphicBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: NeumorphicAppBar(title: Text(locale.addTask)),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Neumorphic(
+                    style: const NeumorphicStyle(depth: -2),
+                    child: TextFormField(
+                      controller: _nameController,
+                      decoration: InputDecoration(labelText: locale.taskName),
+                      validator: (v) =>
+                          v == null || v.isEmpty ? locale.enterName : null,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Neumorphic(
+                    style: const NeumorphicStyle(depth: -2),
+                    child: TextFormField(
+                      controller: _descriptionController,
+                      decoration:
+                          InputDecoration(labelText: locale.taskDescription),
+                      validator: (v) =>
+                          v == null || v.isEmpty ? locale.enterDescription : null,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _deadline == null
+                              ? locale.noDeadline
+                              : '${locale.due}: ${_deadline!.toLocal()}'
+                                  .split('.')
+                                  .first,
+                        ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: _pickDeadline,
-                      child: const Text('Select Deadline'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Status'),
-                  value: _status,
-                  items: const [
-                    DropdownMenuItem(value: 'urgent', child: Text('Urgent')),
-                    DropdownMenuItem(value: 'important', child: Text('Important')),
-                    DropdownMenuItem(value: 'simple', child: Text('Simple')),
-                  ],
-                  onChanged: (val) => setState(() => _status = val),
-                  validator: (v) => v == null ? 'Select status' : null,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _saveTask,
-                  child: const Text('Save'),
-                ),
-              ],
+                      NeumorphicButton(
+                        onPressed: _pickDeadline,
+                        style: const NeumorphicStyle(depth: 4),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 12),
+                        child: Text(locale.selectDeadline),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(labelText: locale.status),
+                    value: _status,
+                    items: [
+                      DropdownMenuItem(value: 'urgent', child: Text(locale.urgent)),
+                      DropdownMenuItem(value: 'important', child: Text(locale.important)),
+                      DropdownMenuItem(value: 'simple', child: Text(locale.simple)),
+                    ],
+                    onChanged: (val) => setState(() => _status = val),
+                    validator: (v) => v == null ? locale.selectStatus : null,
+                  ),
+                  const SizedBox(height: 20),
+                  NeumorphicButton(
+                    onPressed: _saveTask,
+                    style: const NeumorphicStyle(depth: 4),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    child: Text(locale.save),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
