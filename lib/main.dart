@@ -2,6 +2,7 @@ import 'package:codex/provider/task_provider.dart';
 import 'package:codex/screens/task_home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'app_theme.dart';
 
 void main() => runApp(const TaskApp());
 
@@ -12,9 +13,10 @@ class TaskApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => TaskProvider(),
-      child: const MaterialApp(
+      child: MaterialApp(
         title: 'Task Manager',
-        home: TaskHomePage(),
+        theme: AppTheme.theme,
+        home: const TaskHomePage(),
         debugShowCheckedModeBanner: false,
       ),
     );
